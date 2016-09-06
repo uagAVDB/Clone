@@ -31,6 +31,7 @@ mergeISbyLTR <- function(IStable, name, window.up=10, window.down=10, output){
 	error <- GRanges()
 
 	if(nrow(IStable) >= 1){ 
+	
 		IS <- makeGRangesFromDataFrame(data.frame(
 		seqnames=IStable$chr, 
 		start=c(IStable$pos),
@@ -114,20 +115,21 @@ mergeISbyLTR <- function(IStable, name, window.up=10, window.down=10, output){
 			#viral.pos <- viral.pos[,-3]
 			colnames(viral.pos) <- c("chr", "Approx.pos", "LTR", "Orientation", "Clones", "Upstream_ID", "Upstream_Gene", "DistanceUp", "Downstream_ID", "Downstream_Gene", "DistanceDown", "Genomic_Context", "Context")
 	
-			# If only one IS or 0 detected no used to do the full pipeline
-		} else if(length(IS)==1 | length(IS.3LTR) < 1){
+		# If only 0/1 IS detected or Only LTR5
+		} else if(length(IS) < 1 | length(IS.3LTR) < 1){
+		
 			print(" Only LTR5 or LTR3 detected ")
 			viral.pos <- as.data.frame(IS)[,c(1,2,4,7,3,8,9,10,11,12,13,14,15)]
 			colnames(viral.pos) <- c("chr", "Approx.pos", "LTR", "Orientation", "Clones", "Upstream_ID", "Upstream_Gene", "DistanceUp",
 			"Downstream_ID", "Downstream_Gene", "DistanceDown", "Genomic_Context", "Context")
-		} else if(length(IS)==0){
-			viral.pos <- data.frame(chr=as.numeric(0), Approx.pos=as.numeric(0), LTR=as.numeric(0), Orientation=as.numeric(0), 
-			Clones=as.numeric(0), Upstream_ID=as.numeric(0), Upstream_Gene=as.numeric(0), DistanceUp=as.numeric(0), 
-			Downstream_ID=as.numeric(0), Downstream_Gene=as.numeric(0), DistanceDown=as.numeric(0), Genomic_Context=as.numeric(0), 
-			Context=as.numeric(0))
-		}
+			} else if(length(IS)==0){
+				viral.pos <- data.frame(chr=as.numeric(0), Approx.pos=as.numeric(0), LTR=as.numeric(0), Orientation=as.numeric(0), 
+				Clones=as.numeric(0), Upstream_ID=as.numeric(0), Upstream_Gene=as.numeric(0), DistanceUp=as.numeric(0), 
+				Downstream_ID=as.numeric(0), Downstream_Gene=as.numeric(0), DistanceDown=as.numeric(0), Genomic_Context=as.numeric(0), 
+				Context=as.numeric(0))
+			}
 		
-	# In case using the tsv files
+	# If the input file is empty
 	} else if(nrow(IStable)==0){
 		viral.pos <- data.frame(chr=as.numeric(0), Approx.pos=as.numeric(0), LTR=as.numeric(0), Orientation=as.numeric(0), 
 		Clones=as.numeric(0), Upstream_ID=as.numeric(0), Upstream_Gene=as.numeric(0), DistanceUp=as.numeric(0), 
@@ -175,11 +177,11 @@ mergeISbyLTR <- function(IStable, name, window.up=10, window.down=10, output){
 }
 
 
-files <- list.files("./tsv", full.names=T)
-a <- sapply(strsplit(list.files("./tsv"), split="="), function(x) paste(x[1:2], collapse="="))
-b <- sapply(strsplit(sapply(strsplit(list.files("./tsv"), split="="), function(x) x[3]), "_"), function(x) x[1])
-name <- paste(a,b, sep="=")
+#files <- list.files("./tsv", full.names=T)
+#a <- sapply(strsplit(list.files("./tsv"), split="="), function(x) paste(x[1:2], collapse="="))
+#b <- sapply(strsplit(sapply(strsplit(list.files("./tsv"), split="="), function(x) x[3]), "_"), function(x) x[1])
+#name <- paste(a,b, sep="=")
 
-for(i in 1:length(files)){
-	mergeISbyLTR(files[[i]], name[i], 10,10, "./")
-	}
+#for(i in 1:length(files)){
+#	mergeISbyLTR(files[[i]], name[i], 10,10, "./")
+#	}
