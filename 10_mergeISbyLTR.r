@@ -2,7 +2,7 @@
 # 																	#
 #		LTR5'-LTR3' detection: Merging into single positions		#
 #																	#	
-#		© Vincent Hahaut, 2016										#
+#																	#
 #####################################################################
 
 
